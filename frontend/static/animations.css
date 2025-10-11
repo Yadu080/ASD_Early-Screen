@@ -1,0 +1,232 @@
+/* Advanced animations and micro-interactions */
+
+/* Hover effects for interactive elements */
+.glass-card {
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Button hover effects */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+/* Typing effect for text areas */
+.textarea-container {
+  position: relative;
+}
+
+.textarea-container::after {
+  content: '';
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  width: 2px;
+  height: 20px;
+  background: var(--primary);
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Probability circle animation */
+.prob-circle {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* SHAP image zoom effect */
+.shap-image-container {
+  position: relative;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+.shap-image {
+  transition: transform 0.3s ease;
+}
+
+.shap-image-container:hover .shap-image {
+  transform: scale(1.1);
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.shap-image-container:hover .image-overlay {
+  opacity: 1;
+}
+
+/* Form validation animations */
+.input-group.error .textarea-container textarea,
+.input-group.error .file-upload-label {
+  border-color: var(--danger);
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Success pulse animation */
+.input-group.success .textarea-container textarea,
+.input-group.success .file-upload-label {
+  border-color: var(--success);
+  animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+  0% { box-shadow: 0 0 0 0 rgba(0, 245, 160, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(0, 245, 160, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 245, 160, 0); }
+}
+
+/* Loading state for buttons */
+.btn.loading {
+  pointer-events: none;
+  position: relative;
+}
+
+.btn.loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Stagger animation for result cards */
+.result-section .result-content > * {
+  animation: staggerIn 0.6s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.result-section .result-content > *:nth-child(1) { animation-delay: 0.1s; }
+.result-section .result-content > *:nth-child(2) { animation-delay: 0.2s; }
+.result-section .result-content > *:nth-child(3) { animation-delay: 0.3s; }
+.result-section .result-content > *:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes staggerIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Gradient text animation */
+.gradient-text {
+  background: linear-gradient(-45deg, var(--primary), var(--secondary), var(--success), var(--warning));
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* File upload drag animation */
+.file-upload-label.drag-over {
+  animation: dragPulse 0.6s ease-out infinite;
+}
+
+@keyframes dragPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* Notification slide animations */
+.notification {
+  animation: slideInRight 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%) translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Meta items appear animation */
+.meta-item {
+  animation: fadeInUp 0.5s ease-out forwards;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.meta-item:nth-child(1) { animation-delay: 0.1s; }
+.meta-item:nth-child(2) { animation-delay: 0.2s; }
+.meta-item:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive animation adjustments */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

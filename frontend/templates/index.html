@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ASD Early-Screen — AI-Powered Analysis</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='animations.css') }}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<svg style="position: absolute; width: 0; height: 0;">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>
+
+</head>
+<body>
+  <!-- Animated background particles -->
+  <div id="particles-container"></div>
+  
+  <!-- Floating elements -->
+  <div class="floating-elements">
+    <div class="floating-circle circle-1"></div>
+    <div class="floating-circle circle-2"></div>
+    <div class="floating-circle circle-3"></div>
+  </div>
+
+  <main class="app-container">
+    <!-- Header with glassmorphism effect -->
+    <header class="app-header">
+      <div class="header-content">
+        <div class="logo-section">
+          <div class="logo-icon">
+            <i class="fas fa-brain"></i>
+          </div>
+          <div class="logo-text">
+            <h1>ASD Early-Screen</h1>
+            <p class="subtitle">AI-Powered Autism Spectrum Disorder Analysis</p>
+          </div>
+        </div>
+        <div class="status-indicator">
+          <div class="status-dot"></div>
+          <span>Backend: <code>{{ backend }}</code></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main dashboard -->
+    <div class="dashboard">
+      <!-- Input section -->
+      <section class="glass-card input-section">
+        <div class="card-header">
+          <div class="header-icon">
+            <i class="fas fa-upload"></i>
+          </div>
+          <div>
+            <h2>Data Input</h2>
+            <p>Upload data via JSON, CSV, or use sample data</p>
+          </div>
+        </div>
+
+        <form id="inputForm" class="input-form">
+          <div class="input-group">
+            <label class="input-label">
+              <i class="fas fa-code"></i>
+              Paste JSON Data
+            </label>
+            <div class="textarea-container">
+              <textarea id="jsonText" placeholder='{"A1_Score":1, "A2_Score":0, "age":5, "gender_m":1, "jundice_yes":0, "austim_yes":0}'></textarea>
+              <div class="textarea-overlay"></div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">
+              <i class="fas fa-file-csv"></i>
+              Upload CSV File
+            </label>
+            <div class="file-upload-container">
+              <input id="csvFile" type="file" accept=".csv" class="file-input">
+              <label for="csvFile" class="file-upload-label">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Choose CSV file or drag here</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button id="btnSample" type="button" class="btn btn-secondary">
+              <i class="fas fa-flask"></i>
+              Load Sample
+            </button>
+            <button id="btnPredict" type="submit" class="btn btn-primary">
+              <i class="fas fa-brain"></i>
+              <span>Analyze</span>
+              <div class="btn-ripple"></div>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Results section -->
+      <section id="resultCard" class="glass-card result-section" style="display:none;">
+        <div class="card-header">
+          <div class="header-icon result-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div>
+            <h2>Analysis Results</h2>
+            <p id="analysisTimestamp"></p>
+          </div>
+        </div>
+
+        <div class="result-content">
+          <!-- Risk assessment display -->
+          <div class="risk-assessment">
+            <div class="risk-info">
+              <h3>Risk Assessment</h3>
+              <div class="risk-badge" id="riskBadge">
+                <span id="riskLevel">Calculating...</span>
+              </div>
+              <p id="riskDescription" class="risk-desc"></p>
+            </div>
+            
+            <div class="probability-display">
+              <div class="prob-circle">
+                <svg class="prob-svg" viewBox="0 0 100 100">
+                  <circle class="prob-bg" cx="50" cy="50" r="45"></circle>
+                  <circle class="prob-fill" id="probCircle" cx="50" cy="50" r="45"></circle>
+                </svg>
+                <div class="prob-text">
+                  <span id="probValue">0%</span>
+                  <small>Probability</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Explanation section -->
+          <div class="explanation-section">
+            <div class="explanation-header">
+              <h4><i class="fas fa-lightbulb"></i> Model Explanation</h4>
+              <button id="btnShowShap" class="btn btn-outline">
+                <i class="fas fa-eye"></i>
+                View SHAP Analysis
+              </button>
+            </div>
+            <p id="explainText" class="explanation-text"></p>
+          </div>
+
+          <!-- SHAP visualization -->
+          <div id="shapContainer" class="shap-container" style="display:none;">
+            <div class="shap-header">
+              <h4><i class="fas fa-chart-bar"></i> SHAP Feature Importance</h4>
+            </div>
+            <div class="shap-image-container">
+              <img id="shapImg" alt="SHAP explanation" class="shap-image">
+              <div class="image-overlay">
+                <i class="fas fa-search-plus"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metadata -->
+          <div class="metadata-section">
+            <div class="meta-item">
+              <i class="fas fa-microchip"></i>
+              <span>Model: <span id="modelVersion">v1</span></span>
+            </div>
+            <div class="meta-item">
+              <i class="fas fa-clock"></i>
+              <span>Latency: <span id="latencyMs">-- ms</span></span>
+            </div>
+            <div class="meta-item">
+              <i class="fas fa-calendar"></i>
+              <span id="analysisDate"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-content">
+        <div class="disclaimer">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>Not a medical device • For research and demonstration purposes only</span>
+        </div>
+        <div class="credits">
+          <span>IBM Z Datathon • Powered by AI/ML</span>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Loading overlay -->
+  <div id="loadingOverlay" class="loading-overlay" style="display:none;">
+    <div class="loading-content">
+      <div class="loading-spinner">
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+      </div>
+      <p>Analyzing data...</p>
+    </div>
+  </div>
+
+  <!-- Success notification -->
+  <div id="successNotification" class="notification success" style="display:none;">
+    <i class="fas fa-check-circle"></i>
+    <span>Analysis completed successfully!</span>
+  </div>
+
+  <!-- Error notification -->
+  <div id="errorNotification" class="notification error" style="display:none;">
+    <i class="fas fa-exclamation-circle"></i>
+    <span id="errorMessage">An error occurred</span>
+  </div>
+
+<script>
+// Particle background effect
+function initParticles() {
+  const container = document.getElementById('particles-container');
+  const particleCount = 50;
+  
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 20 + 's';
+    particle.style.animationDuration = (Math.random() * 20 + 20) + 's';
+    container.appendChild(particle);
+  }
+}
+
+// API endpoints
+const apiPredict = "/api/predict";
+
+// Show notification
+function showNotification(type, message) {
+  const notification = document.getElementById(type + 'Notification');
+  if (type === 'error') {
+    document.getElementById('errorMessage').textContent = message;
+  }
+  notification.style.display = 'flex';
+  setTimeout(() => {
+    notification.style.display = 'none';
+  }, 5000);
+}
+
+// Show loading
+function showLoading(show = true) {
+  document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+}
+
+// Animate probability circle
+function animateProbabilityCircle(probability) {
+  const circle = document.getElementById('probCircle');
+  const circumference = 2 * Math.PI * 45;
+  const offset = circumference - (probability / 100) * circumference;
+  
+  circle.style.strokeDasharray = circumference;
+  circle.style.strokeDashoffset = offset;
+}
+
+// Update risk badge
+function updateRiskBadge(probability, prediction) {
+  const badge = document.getElementById('riskBadge');
+  const level = document.getElementById('riskLevel');
+  const desc = document.getElementById('riskDescription');
+  
+  if (probability >= 70) {
+    badge.className = 'risk-badge high';
+    level.textContent = 'High Risk';
+    desc.textContent = 'Strong indicators suggest further evaluation may be beneficial.';
+  } else if (probability >= 25) {
+    badge.className = 'risk-badge moderate';
+    level.textContent = 'Moderate Risk';
+    desc.textContent = 'Some indicators present, monitoring recommended.';
+  } else {
+    badge.className = 'risk-badge low';
+    level.textContent = 'Low Risk';
+    desc.textContent = 'Minimal indicators detected in current assessment.';
+  }
+}
+
+// Show results with animations
+function showResult(result, includeShap = false) {
+  const resultCard = document.getElementById('resultCard');
+  resultCard.style.display = 'block';
+  resultCard.classList.add('slide-in');
+  
+  const prob = (result.probability || 0) * 100;
+  const pred = result.prediction;
+  
+  // Update probability display
+  document.getElementById('probValue').textContent = prob.toFixed(1) + "%";
+  animateProbabilityCircle(prob);
+  updateRiskBadge(prob, pred);
+  
+  // Update explanation
+  document.getElementById('explainText').textContent = result.explanation || "";
+  
+  // Update metadata
+  document.getElementById('modelVersion').textContent = result.model_version || "v1";
+  document.getElementById('latencyMs').textContent = result.latency_ms || "??";
+  document.getElementById('analysisDate').textContent = new Date().toLocaleString();
+  document.getElementById('analysisTimestamp').textContent = "Analysis completed at " + new Date().toLocaleTimeString();
+  
+  // Handle SHAP display
+  if (includeShap && result.shap_b64) {
+    document.getElementById('shapImg').src = "data:image/png;base64," + result.shap_b64;
+    document.getElementById('shapContainer').style.display = 'block';
+    document.getElementById('shapContainer').classList.add('fade-in');
+  } else {
+    document.getElementById('shapContainer').style.display = 'none';
+  }
+  
+  // Show success notification
+  showNotification('success', 'Analysis completed successfully!');
+}
+
+// CSV file reader
+function readCSVFirstRow(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => {
+      const text = r.result;
+      const lines = text.split(/\r?\n/).filter(Boolean);
+      if (lines.length < 2) {
+        return reject("CSV must have header and at least one row");
+      }
+      const header = lines.split(',');
+      const row = lines.split(',');
+      const obj = {};
+      for (let i = 0; i < header.length && i < row.length; i++) {
+        let k = header[i].trim();
+        let v = row[i].trim();
+        if (v === "") { obj[k] = null; continue; }
+        if (!isNaN(v)) obj[k] = Number(v);
+        else obj[k] = v;
+      }
+      resolve(obj);
+    };
+    r.onerror = () => reject("Failed to read file");
+    r.readAsText(file);
+  });
+}
+
+// Form submission handler
+document.getElementById('inputForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const jsonText = document.getElementById('jsonText').value.trim();
+  const fileElem = document.getElementById('csvFile');
+  let payload = null;
+
+  showLoading(true);
+
+  try {
+    if (fileElem.files && fileElem.files.length) {
+      payload = await readCSVFirstRow(fileElem.files);
+    } else if (jsonText) {
+      payload = JSON.parse(jsonText);
+    } else {
+      showLoading(false);
+      showNotification('error', 'Please paste JSON or upload a CSV file, or click Load Sample.');
+      return;
+    }
+
+    // Make prediction request
+    const resp = await fetch(apiPredict, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    
+    const result = await resp.json();
+    showLoading(false);
+    
+    if (result.error) {
+      showNotification('error', result.error);
+      return;
+    }
+    
+    showResult(result, false);
+    document.getElementById('shapContainer').style.display = 'none';
+    
+  } catch (err) {
+    showLoading(false);
+    showNotification('error', err.message || 'An unexpected error occurred');
+    console.error(err);
+  }
+});
+
+// Load sample button
+document.getElementById('btnSample').addEventListener('click', async () => {
+  try {
+    const r = await fetch('/api/sample');
+    const j = await r.json();
+    if (j.error) {
+      showNotification('error', j.error);
+      return;
+    }
+    document.getElementById('jsonText').value = JSON.stringify(j, null, 2);
+    showNotification('success', 'Sample data loaded successfully!');
+  } catch (e) {
+    showNotification('error', 'Failed to load sample: ' + e.message);
+  }
+});
+
+// Show SHAP button
+document.getElementById('btnShowShap').addEventListener('click', async () => {
+  const jsonText = document.getElementById('jsonText').value.trim();
+  if (!jsonText) {
+    showNotification('error', 'No input data available');
+    return;
+  }
+  
+  let payload;
+  try {
+    payload = JSON.parse(jsonText);
+  } catch (e) {
+    showNotification('error', 'Invalid JSON data');
+    return;
+  }
+  
+  showLoading(true);
+  
+  try {
+    const resp = await fetch(apiPredict + "?include_shap=true", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    
+    const j = await resp.json();
+    showLoading(false);
+    
+    if (j.error) {
+      showNotification('error', j.error);
+      return;
+    }
+    
+    showResult(j, true);
+  } catch (e) {
+    showLoading(false);
+    showNotification('error', 'Failed to fetch SHAP analysis: ' + e.message);
+  }
+});
+
+// File drag and drop
+const fileInput = document.getElementById('csvFile');
+const fileLabel = document.querySelector('.file-upload-label');
+
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+  fileLabel.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+  e.preventDefault();
+  e.stopPropagation();
+}
+
+['dragenter', 'dragover'].forEach(eventName => {
+  fileLabel.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+  fileLabel.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight() {
+  fileLabel.classList.add('drag-over');
+}
+
+function unhighlight() {
+  fileLabel.classList.remove('drag-over');
+}
+
+fileLabel.addEventListener('drop', handleDrop, false);
+
+function handleDrop(e) {
+  const dt = e.dataTransfer;
+  const files = dt.files;
+  fileInput.files = files;
+}
+
+// Initialize particles when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  initParticles();
+});
+</script>
+</body>
+</html>
+
+

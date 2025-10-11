@@ -1,0 +1,7 @@
+{
+  "input_file": "/home/jovyan/autism/data/raw/Autism-Child-Data.arff",
+  "output_file": "/home/jovyan/autism/data/processed/autism_clean.csv",
+  "rows": 292,
+  "cols": 15,
+  "label_col": "label"
+}

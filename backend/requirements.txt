@@ -1,0 +1,9 @@
+flask
+cryptography
+joblib
+pandas
+numpy
+scikit-learn
+matplotlib
+pytest
+# shap intentionally omitted for simpler install; add if you want shap visuals

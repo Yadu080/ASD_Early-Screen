@@ -1,0 +1,7 @@
+{
+  "feature": "gender",
+  "TPR_difference": 0.05,
+  "FPR_difference": 0.03,
+  "overall_fairness": "Balanced",
+  "note": "Small disparity observed between genders; within acceptable threshold."
+}
