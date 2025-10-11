@@ -29,24 +29,8 @@ Built to run **securely on IBM Z’s LinuxONE cloud platform**, the project emph
 
 ```
 
-UCI Autism Dataset (.arff)
-│
-▼
-[ scripts/data_prep_uci.py ]
-→ Cleaned CSV
-│
-▼
-[ scripts/train_and_encrypt.py ]
-→ Trains Logistic Regression
-→ Encrypts model/scaler artifacts (Fernet AES)
-│
-▼
-[ backend/app.py ]
-Flask API → Predicts, Explains (SHAP), Logs
-│
-▼
-[ frontend/app.py ]
-Flask Web UI → Paste JSON / Upload CSV / Use Sample
+![system overview](assets/flow1.png)
+
 
 ```
 
