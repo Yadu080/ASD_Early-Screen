@@ -336,7 +336,8 @@ Use, modify, and share — just don’t use it for real medical decisions.
 
 ## 👩‍💻 Authors / Maintainers
 
-* **Yadu** — Engineering | ML, Backend, and Architecture
+* **Yadu**, **Sanjay**, **Rudraksh**— Engineering | ML, Backend, and Architecture
+* Team: Code warriors GAT174
 * Built with ❤️ for IBM Z Datathon 2025
 * Guided by the principle: “Secure, Explainable, and Ethical AI”
 
