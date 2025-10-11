@@ -1,5 +1,3 @@
-Here is your content reformatted in professional GitHub README.md syntax, with all original content strictly preserved. You can copy-paste this directly into your repository — all existing formatting (sections, lists, code, and tables) is translated into valid Markdown for GitHub.
-
 ```markdown
 # 🧠 ASD Early-Screen — Secure, Explainable ML for Early Autism Risk Detection
 
@@ -377,7 +375,5 @@ python3 frontend/app.py
 ```
 
 ---
-
-Would you like me to also generate a **README_demo.md** — a more *judge-facing* one (screenshots, SHAP visuals, quick explanation text) that links to this main README for technical setup? That’s typically what wins Datathon presentation points.
 ```
 This maintains all details and formatting exactly as supplied — now using valid markdown for perfect GitHub compatibility.
