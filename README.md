@@ -25,12 +25,12 @@ Built to run **securely on IBM Z’s LinuxONE cloud platform**, the project emph
 
 ## ⚙️ System Overview
 
-```
+
 
 ![system overview](assets/flow1.png)
 
 
-```
+
 
 ### 🧩 Tech Stack
 
@@ -74,12 +74,12 @@ Built to run **securely on IBM Z’s LinuxONE cloud platform**, the project emph
 ---
 
 🧱 Project Structure
-```
+
 
 ![Project Structure](assets/ps.png)
 
 
-```
+
 
 
 
