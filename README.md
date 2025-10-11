@@ -1,7 +1,5 @@
 
----
 
-```markdown
 # 🧠 ASD Early-Screen — Secure, Explainable ML for Early Autism Risk Detection
 
 > ⚡️ **Category:** Tech for Good  
@@ -75,41 +73,18 @@ Built to run **securely on IBM Z’s LinuxONE cloud platform**, the project emph
 
 ---
 
-## 🧱 Project Structure
+🧱 Project Structure
+```
 
-autism/
-│
-├── data/
-│   ├── raw/                     # Put UCI .arff here
-│   ├── processed/               # Cleaned CSV
-│   └── sample/                  # sample_row.csv for testing
-│
-├── scripts/
-│   ├── data_prep_uci.py         # Parse ARFF → Clean CSV
-│   └── train_and_encrypt.py     # Train model, encrypt artifacts
-│
-├── backend/
-│   ├── app.py                   # Flask backend (predict/explain)
-│   ├── requirements.txt
-│   ├── core/
-│   │   ├── inference.py         # Decrypt + predict + SHAP
-│   │   ├── model_store.py       # Fernet decryption utilities
-│   │   ├── key_manager.py       # Key load/rotation logic
-│   │   ├── fairness.py          # Fairness metrics loader
-│   │   └── audit.py             # Hash-based logging
-│   └── artifacts/               # model_v1.pkl.enc, scaler_v1.pkl.enc, fernet.key
-│
-├── frontend/
-│   ├── app.py                   # Flask UI (proxy to backend)
-│   ├── templates/
-│   │   └── index.html           # Main web interface
-│   └── static/
-│       └── style.css            # Clean UI styling
-│
-└── README.md
+![Project Structure](assets/ps.png)
 
 
----
+```
+
+
+
+
+
 
 ## 🧰 Setup Guide (for LinuxONE or local)
 
@@ -392,8 +367,6 @@ python3 frontend/app.py
 
 > ✅ Paste JSON → Predict → Click “Show SHAP” → Done.
 
-```
 
----
 
-```
+
