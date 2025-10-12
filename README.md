@@ -1,6 +1,6 @@
 
 
-# 🧠 ASD Early-Screen — Secure, Explainable ML for Early Autism Risk Detection
+# 🧠 ASD Early-Screen — Secure, Explainable ML for Early Autism Risk Detection (GAT 174)
 
 > ⚡️ **Category:** Tech for Good  
 > 🖥️ **Platform:** IBM LinuxONE (Jupyter + Flask)  
